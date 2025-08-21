@@ -1,0 +1,15 @@
+server:
+  port: 8081
+  error:
+    include-message: ALWAYS
+    include-binding-errors: ALWAYS
+    include-stacktrace: NEVER
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/users?useSSL=false&serverTimezone=UTC
+    username: root
+    password: '8888'
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update

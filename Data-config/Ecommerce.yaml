@@ -1,0 +1,15 @@
+server:
+  port: 8083
+  error:
+    include-message: ALWAYS
+    include-binding-errors: ALWAYS
+    include-stacktrace: NEVER
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521/PDBECOMMERCE
+    username: ECOMMERCE
+    password: 'ECOMMERCEPASS'
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update

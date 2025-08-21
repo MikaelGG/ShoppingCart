@@ -1,0 +1,16 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: Config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/MikaelGG/ShoppingCart.git
+          default-label: master
+          search-paths:
+            - Data-config
+
+
+
