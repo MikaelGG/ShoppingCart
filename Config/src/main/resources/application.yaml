@@ -7,7 +7,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/MikaelGG/ShoppingCart.git
+          uri: https://github.com/MikaelGG/ShoppingCart
           default-label: master
           search-paths: Data-config
 
