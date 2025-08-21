@@ -9,8 +9,7 @@ spring:
         git:
           uri: https://github.com/MikaelGG/ShoppingCart.git
           default-label: master
-          search-paths:
-            - Data-config
+          search-paths: Data-config
 
 
 
