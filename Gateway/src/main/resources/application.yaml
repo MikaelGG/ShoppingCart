@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: Gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: Users
+              uri: http://localhost:8081
+              predicates:
+                - Path= /api/users/**, /api/user-types/**
+            - id: Products
+              uri: http://localhost:8082
+              predicates:
+                - Path= /api/product-types/**, /api/products/**
+            - id: Ecommerce
+              uri: http://localhost:8083
+              predicates:
+                - Path= /api/shipping-addresses/**, /api/invoices/**

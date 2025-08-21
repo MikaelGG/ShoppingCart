@@ -38,12 +38,22 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Config" />
       </profile>
+      <profile name="Annotation profile for Gateway" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/3.5.5/spring-boot-configuration-processor-3.5.5.jar" />
+        </processorPath>
+        <module name="Gateway" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Config" options="-parameters" />
       <module name="Ecommerce" options="-parameters" />
+      <module name="Gateway" options="-parameters" />
       <module name="Products" options="-parameters" />
       <module name="Users" options="-parameters" />
     </option>
