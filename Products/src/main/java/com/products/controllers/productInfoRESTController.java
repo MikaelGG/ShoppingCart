@@ -12,6 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"},
+        allowCredentials = "true",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class productInfoRESTController {
 
     @Autowired
