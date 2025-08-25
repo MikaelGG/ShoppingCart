@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -15,8 +16,8 @@ public class productInfoModel {
     @Id
     private String code;
 
-    @Column(name = "photo", nullable = false, length = 55)
-    @Size(min = 20, max = 55, message = "Photo URL must be between 20 and 55 characters")
+    @Column(name = "photo", nullable = false, length = 255)
+    @NotNull(message = "Photo URL cannot be null")
     private String photo;
 
     @Column(name = "name", nullable = false, length = 125)

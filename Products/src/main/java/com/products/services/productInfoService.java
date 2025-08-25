@@ -1,6 +1,7 @@
 package com.products.services;
 
 import com.products.models.productInfoModel;
+import com.products.models.productTypeModel;
 import com.products.repositories.productInfoRep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,11 @@ public class productInfoService {
     @Transactional(readOnly = true)
     public List<productInfoModel> getAllProductInfo() {
         return productInfoRep.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<productInfoModel> getProductsByType(productTypeModel productType) {
+        return productInfoRep.findByProductType(productType);
     }
 
     @Transactional(readOnly = true)

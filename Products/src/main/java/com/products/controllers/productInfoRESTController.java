@@ -1,6 +1,7 @@
 package com.products.controllers;
 
 import com.products.models.productInfoModel;
+import com.products.models.productTypeModel;
 import com.products.services.productInfoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class productInfoRESTController {
     @GetMapping
     public ResponseEntity<List<productInfoModel>> getAllProductInfo() {
         return ResponseEntity.status(HttpStatus.OK).body(productInfoService.getAllProductInfo());
+    }
+
+    @GetMapping("/product/{productType}")
+    public ResponseEntity<List<productInfoModel>> getProductsByType(@PathVariable productTypeModel productType) {
+        return ResponseEntity.status(HttpStatus.OK).body(productInfoService.getProductsByType(productType));
     }
 
     @GetMapping("/{code}")
