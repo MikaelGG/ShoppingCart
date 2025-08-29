@@ -37,6 +37,15 @@ public class productInfoService {
         return productInfoRep.findById(code).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No product found with code: " + code));
     }
 
+    @Transactional(readOnly = true)
+    public List<productInfoModel> getByNameSearch(String name) {
+        System.out.println(name);
+        if (productInfoRep.findByName(name).isEmpty() || productInfoRep.findByName(name) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        }
+        return productInfoRep.findByName(name);
+    }
+
     @Transactional
     public productInfoModel updateProductInfo(String code, productInfoModel productInfoData) {
         productInfoModel productInfo = productInfoRep.findById(code).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No product found with code: " + code));

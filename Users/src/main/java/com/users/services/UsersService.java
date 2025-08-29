@@ -1,9 +1,10 @@
 package com.users.services;
 
-import com.users.models.usersModel;
-import com.users.repositories.usersRepository;
+import com.users.models.UsersModel;
+import com.users.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -11,18 +12,16 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
-public class usersService {
+public class UsersService {
 
     @Autowired
-    usersRepository usersRepository;
+    UsersRepository usersRepository;
 
-    @Transactional
-    public usersModel createUser(usersModel user) {
-        return usersRepository.save(user);
-    }
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public List<usersModel> getAllUsers() {
+    public List<UsersModel> getAllUsers() {
         if (usersRepository.findAll().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No users found");
         }
@@ -30,13 +29,13 @@ public class usersService {
     }
 
     @Transactional(readOnly = true)
-    public usersModel getUser(long id) {
+    public UsersModel getUser(long id) {
         return usersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
     }
 
     @Transactional
-    public usersModel updateUser(Long id, usersModel userDeatils) {
-        usersModel existingUser = usersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
+    public UsersModel updateUser(Long id, UsersModel userDeatils) {
+        UsersModel existingUser = usersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
         existingUser.setFullName(userDeatils.getFullName());
         existingUser.setPhoneNumber(userDeatils.getPhoneNumber());
         existingUser.setEmail(userDeatils.getEmail());

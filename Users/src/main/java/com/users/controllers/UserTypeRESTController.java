@@ -1,7 +1,7 @@
 package com.users.controllers;
 
-import com.users.models.userTypeModel;
-import com.users.services.userTypeService;
+import com.users.models.UserTypeModel;
+import com.users.services.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,23 +11,23 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user-types")
-public class userTypeRESTController {
+public class UserTypeRESTController {
 
     @Autowired
-    userTypeService userTypeService;
+    UserTypeService userTypeService;
 
     @GetMapping
-    public ResponseEntity<List<userTypeModel>> getAllUserTypes() {
+    public ResponseEntity<List<UserTypeModel>> getAllUserTypes() {
         return ResponseEntity.status(HttpStatus.OK).body(userTypeService.getAllUserTypes());
     }
 
     @PostMapping
-    public ResponseEntity<userTypeModel> createUserType(@RequestBody userTypeModel userTypeModelU) {
+    public ResponseEntity<UserTypeModel> createUserType(@RequestBody UserTypeModel userTypeModelU) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userTypeService.createUserType(userTypeModelU));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<userTypeModel> updateUserType(@PathVariable Long id, @RequestBody userTypeModel userTypeModelU) {
+    public ResponseEntity<UserTypeModel> updateUserType(@PathVariable Long id, @RequestBody UserTypeModel userTypeModelU) {
         return ResponseEntity.status(HttpStatus.OK).body(userTypeService.updateUserType(id, userTypeModelU));
     }
 

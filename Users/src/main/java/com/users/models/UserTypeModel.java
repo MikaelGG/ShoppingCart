@@ -1,6 +1,5 @@
 package com.users.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -13,7 +12,7 @@ import java.util.Set;
 @Table(name = "user_type")
 @Data
 @NoArgsConstructor
-public class userTypeModel {
+public class UserTypeModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +23,10 @@ public class userTypeModel {
 
     @OneToMany(mappedBy = "userType", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<usersModel> users;
+    private Set<UsersModel> users;
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public userTypeModel(Long id) {
+    public UserTypeModel(Long id) {
         this.id = id;
     }
 

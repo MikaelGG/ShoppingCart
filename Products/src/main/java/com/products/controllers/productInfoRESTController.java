@@ -41,6 +41,11 @@ public class productInfoRESTController {
         return ResponseEntity.status(HttpStatus.OK).body(productInfoService.getProductInfo(code));
     }
 
+    @GetMapping("/searcher")
+    public ResponseEntity<List<productInfoModel>> getByNameSearch(@RequestParam String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(productInfoService.getByNameSearch(name));
+    }
+
     @PutMapping("/{code}")
     public ResponseEntity<productInfoModel> updateProductInfo(@PathVariable String code, @RequestBody @Valid productInfoModel productInfoData){
         return ResponseEntity.status(HttpStatus.OK).body(productInfoService.updateProductInfo(code, productInfoData));

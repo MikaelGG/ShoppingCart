@@ -1,13 +1,12 @@
 package com.users.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "users")
 @Data
-public class usersModel {
+public class UsersModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +26,6 @@ public class usersModel {
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user_type", nullable = false)
-    private userTypeModel userType;
+    private UserTypeModel userType;
 
 }

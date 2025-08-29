@@ -1,8 +1,7 @@
 package com.users.services;
 
-import com.users.models.userTypeModel;
-import com.users.repositories.userTypeRepository;
-import org.hibernate.ObjectNotFoundException;
+import com.users.models.UserTypeModel;
+import com.users.repositories.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,13 +11,13 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
-public class userTypeService {
+public class UserTypeService {
 
     @Autowired
-    userTypeRepository userTypeRepository;
+    UserTypeRepository userTypeRepository;
 
     @Transactional(readOnly = true)
-    public List<userTypeModel> getAllUserTypes() {
+    public List<UserTypeModel> getAllUserTypes() {
         if (userTypeRepository.findAll().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No users found");
         }
@@ -26,13 +25,13 @@ public class userTypeService {
     }
 
     @Transactional
-    public userTypeModel createUserType(userTypeModel userTypeModel) {
+    public UserTypeModel createUserType(UserTypeModel userTypeModel) {
         return userTypeRepository.save(userTypeModel);
     }
 
     @Transactional
-    public userTypeModel updateUserType(Long id, userTypeModel userTypeModelU) {
-        userTypeModel ut = userTypeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User type not found"));
+    public UserTypeModel updateUserType(Long id, UserTypeModel userTypeModelU) {
+        UserTypeModel ut = userTypeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User type not found"));
         ut.setTypeName(userTypeModelU.getTypeName());
         return userTypeRepository.save(ut);
     }
