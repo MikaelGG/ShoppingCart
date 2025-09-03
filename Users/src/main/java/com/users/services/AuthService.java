@@ -53,6 +53,11 @@ public class AuthService {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
+
+            if (jwtBlackList.isBlackListed(jwt)) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token already invalidated");
+            }
+
             jwtBlackList.blackListToken(jwt);
 
             SecurityContextHolder.clearContext();

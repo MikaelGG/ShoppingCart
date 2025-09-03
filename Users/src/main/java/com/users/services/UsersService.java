@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsersService {
@@ -33,13 +34,25 @@ public class UsersService {
         return usersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
     }
 
+    @Transactional(readOnly = true)
+    public UsersModel getUserByEmail(String email) {
+        if (!usersRepository.existsByEmail(email)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with email: " + email + ", not found");
+        }
+        Optional<UsersModel> user = usersRepository.findByEmail(email);
+        return user.get();
+    }
+
     @Transactional
     public UsersModel updateUser(Long id, UsersModel userDeatils) {
         UsersModel existingUser = usersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
         existingUser.setFullName(userDeatils.getFullName());
         existingUser.setPhoneNumber(userDeatils.getPhoneNumber());
         existingUser.setEmail(userDeatils.getEmail());
-        existingUser.setPassword(userDeatils.getPassword());
+        if (!passwordEncoder.matches(userDeatils.getPassword(), existingUser.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect password");
+        }
+        existingUser.setPassword(passwordEncoder.encode(userDeatils.getPassword()));
         existingUser.setUserType(userDeatils.getUserType());
         return usersRepository.save(existingUser);
     }
