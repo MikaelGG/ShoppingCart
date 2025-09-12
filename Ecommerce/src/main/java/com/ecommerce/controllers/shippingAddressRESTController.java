@@ -32,6 +32,11 @@ public class shippingAddressRESTController {
         return ResponseEntity.status(HttpStatus.OK).body(shippingAddressService.getShippingAddress(id));
     }
 
+    @GetMapping("/ShippAdd")
+    public ResponseEntity<List<shippingAddressModel>> getShippingAddressByIdClient(@RequestParam Long idClient) {
+        return ResponseEntity.status(HttpStatus.OK).body(shippingAddressService.getShippingAddressByIdClient(idClient));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<shippingAddressModel> updateShippingAddress(@PathVariable Long id, @RequestBody @Valid shippingAddressModel shippingAddressData) {
         return ResponseEntity.status(HttpStatus.OK).body(shippingAddressService.updateShippingAddress(id, shippingAddressData));

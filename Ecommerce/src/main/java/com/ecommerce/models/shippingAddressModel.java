@@ -52,6 +52,9 @@ public class shippingAddressModel {
     @NotBlank(message = "Phone number is required")
     private String phone;
 
+    @Column(name = "id_client")
+    private Long idClient;
+
     @OneToMany(mappedBy = "shippingAddress")
     @JsonIgnore
     private Set<invoicesModel> invoices;

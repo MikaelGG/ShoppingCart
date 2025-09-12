@@ -33,6 +33,11 @@ public class shippingAddressService {
         return shippingAddressRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Shipping address not found"));
     }
 
+    @Transactional(readOnly = true)
+    public List<shippingAddressModel> getShippingAddressByIdClient(Long idClient) {
+        return shippingAddressRepository.findAllByIdClient(idClient);
+    }
+
     @Transactional
     public shippingAddressModel updateShippingAddress(Long id , shippingAddressModel shippingAddressData) {
         shippingAddressModel existingAddress = shippingAddressRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Shipping address not found"));
@@ -44,6 +49,7 @@ public class shippingAddressService {
         existingAddress.setCountry(shippingAddressData.getCountry());
         existingAddress.setFullName(shippingAddressData.getFullName());
         existingAddress.setPhone(shippingAddressData.getPhone());
+        existingAddress.setIdClient(shippingAddressData.getIdClient());
         return shippingAddressRepository.save(existingAddress);
     }
 
