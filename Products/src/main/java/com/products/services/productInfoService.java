@@ -54,6 +54,7 @@ public class productInfoService {
         productInfo.setDescription(productInfoData.getDescription());
         productInfo.setQuantity(productInfoData.getQuantity());
         productInfo.setPrice(productInfoData.getPrice());
+        productInfo.setProductType(productInfoData.getProductType());
         return productInfoRep.save(productInfo);
     }
 

@@ -22,7 +22,7 @@ public class productTypeModel {
     private Long id;
 
     @Column(name = "name_type", nullable = false, length = 105)
-    @Size(min = 10, max = 105, message = "Name type must be between 10 and 105 characters")
+    @Size(min = 3, max = 55, message = "Name type must be between 3 and 55 characters")
     private String nameType;
 
     @OneToMany(mappedBy = "productType", cascade = CascadeType.ALL)

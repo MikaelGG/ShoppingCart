@@ -14,6 +14,7 @@ import lombok.Data;
 public class productInfoModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String code;
 
     @Column(name = "photo", nullable = false, length = 255)
