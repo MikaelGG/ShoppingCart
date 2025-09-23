@@ -1,5 +1,7 @@
 package com.users.controllers;
 
+import com.users.dto.UsersDTO;
+import com.users.models.UserTypeModel;
 import com.users.models.UsersModel;
 import com.users.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,13 @@ public class UsersRESTController {
         return ResponseEntity.status(HttpStatus.OK).body(usersService.getUserByEmail(email));
     }
 
+    @GetMapping("/admins/{id}")
+    public ResponseEntity<List<UsersModel>> getAdmins(@PathVariable UserTypeModel id) {
+        return ResponseEntity.status(HttpStatus.OK).body(usersService.getAdmins(id));
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<UsersModel> updateUser(@PathVariable Long id, @RequestBody UsersModel userDetails) {
+    public ResponseEntity<UsersModel> updateUser(@PathVariable Long id, @RequestBody UsersDTO userDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(usersService.updateUser(id, userDetails));
     }
 

@@ -1,5 +1,7 @@
 package com.users.services;
 
+import com.users.dto.UsersDTO;
+import com.users.models.UserTypeModel;
 import com.users.models.UsersModel;
 import com.users.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,16 +45,26 @@ public class UsersService {
         return user.get();
     }
 
+    @Transactional(readOnly = true)
+    public List<UsersModel> getAdmins(UserTypeModel id) {
+        if (!usersRepository.existsByUserType(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Administrators not found");
+        }
+        return usersRepository.findByUserType(id);
+    }
+
     @Transactional
-    public UsersModel updateUser(Long id, UsersModel userDeatils) {
+    public UsersModel updateUser(Long id, UsersDTO userDeatils) {
         UsersModel existingUser = usersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
         existingUser.setFullName(userDeatils.getFullName());
         existingUser.setPhoneNumber(userDeatils.getPhoneNumber());
         existingUser.setEmail(userDeatils.getEmail());
-        if (!passwordEncoder.matches(userDeatils.getPassword(), existingUser.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect password");
+        if (!passwordEncoder.matches(userDeatils.getCurrentPassword(), existingUser.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password incorrect");
         }
-        existingUser.setPassword(passwordEncoder.encode(userDeatils.getPassword()));
+        if (userDeatils.getNewPassword().matches(userDeatils.getRepeatNewPassword())) {
+            existingUser.setPassword(passwordEncoder.encode(userDeatils.getNewPassword()));
+        }
         existingUser.setUserType(userDeatils.getUserType());
         return usersRepository.save(existingUser);
     }
