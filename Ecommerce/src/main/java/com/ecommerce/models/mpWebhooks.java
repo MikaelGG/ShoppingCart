@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mp_webhooks")
@@ -16,18 +17,20 @@ public class mpWebhooks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String action;
-    private String dataId;
-    private String type;
+    private String topic;
+
+    @Column(name = "mp_id")
+    private String mpId;
+
     private String status;
+    private String paymentType;
+    private String paymentMethod;
     private BigDecimal amount;
     private String currency;
 
     @Column(columnDefinition = "json")
-    private String payload;
+    private String rawData;
 
-    private Boolean processed = false;
-
-    @Column(name = "received_at", insertable = false, updatable = false)
-    private java.sql.Timestamp receivedAt;
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private LocalDateTime createdAt;
 }

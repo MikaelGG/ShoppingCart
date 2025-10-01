@@ -37,8 +37,9 @@ public class MercadoPagoRESTController {
     }
 
     @PostMapping("/webhooks")
-    public ResponseEntity<mpWebhooks> webhooks(@RequestBody Map<String, Object> body) {
-        return ResponseEntity.status(HttpStatus.OK).body(mercadoPagoService.WebHook(body));
+    public ResponseEntity<?> webhooks(@RequestBody Map<String, Object> request) {
+        mercadoPagoService.handleWebhook(request);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/webhooks")

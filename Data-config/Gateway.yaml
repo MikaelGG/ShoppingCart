@@ -15,4 +15,4 @@ spring:
             - id: Ecommerce
               uri: http://localhost:8083
               predicates:
-                - Path= /api/shipping-addresses/**, /api/invoices/**, /mercadopago/**
+                - Path= /api/shipping-addresses/**, /api/invoices/**, /api/purchases/**, /mercadopago/**
