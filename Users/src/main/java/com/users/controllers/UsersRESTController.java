@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -40,8 +40,13 @@ public class UsersRESTController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsersModel> updateUser(@PathVariable Long id, @RequestBody UsersDTO userDetails) {
+    public ResponseEntity<HashMap<String, Object>> updateUser(@PathVariable Long id, @RequestBody UsersDTO userDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(usersService.updateUser(id, userDetails));
+    }
+
+    @PutMapping("/admins/{id}")
+    public ResponseEntity<UsersModel> updateAdmin(@PathVariable Long id, @RequestBody UsersDTO userDetails) {
+        return ResponseEntity.status(HttpStatus.OK).body(usersService.updateAdmin(id, userDetails));
     }
 
     @DeleteMapping("/{id}")

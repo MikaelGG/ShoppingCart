@@ -29,9 +29,9 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UsersModel user) {
-        extraClaims.put("ID", user.getId());
+        extraClaims.put("id", user.getId());
         extraClaims.put("fullName", user.getFullName());
-        extraClaims.put("phone", user.getPhoneNumber());
+        extraClaims.put("phoneNumber", user.getPhoneNumber());
         extraClaims.put("userType", user.getUserType().getTypeName());
 
         return Jwts.builder()

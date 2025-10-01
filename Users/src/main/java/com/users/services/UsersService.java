@@ -1,6 +1,7 @@
 package com.users.services;
 
 import com.users.dto.UsersDTO;
+import com.users.jwt.JwtService;
 import com.users.models.UserTypeModel;
 import com.users.models.UsersModel;
 import com.users.repositories.UsersRepository;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,6 +25,9 @@ public class UsersService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    JwtService jwtService;
 
     @Transactional(readOnly = true)
     public List<UsersModel> getAllUsers() {
@@ -54,18 +60,44 @@ public class UsersService {
     }
 
     @Transactional
-    public UsersModel updateUser(Long id, UsersDTO userDeatils) {
+    public HashMap<String, Object> updateUser(Long id, UsersDTO userDeatils) {
         UsersModel existingUser = usersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
         existingUser.setFullName(userDeatils.getFullName());
         existingUser.setPhoneNumber(userDeatils.getPhoneNumber());
         existingUser.setEmail(userDeatils.getEmail());
-        if (!passwordEncoder.matches(userDeatils.getCurrentPassword(), existingUser.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password incorrect");
-        }
-        if (userDeatils.getNewPassword().matches(userDeatils.getRepeatNewPassword())) {
-            existingUser.setPassword(passwordEncoder.encode(userDeatils.getNewPassword()));
+        if (!userDeatils.getCurrentPassword().isEmpty()) {
+            if (!passwordEncoder.matches(userDeatils.getCurrentPassword(), existingUser.getPassword())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password incorrect");
+            }
+            if (userDeatils.getNewPassword().equals(userDeatils.getRepeatNewPassword())) {
+                existingUser.setPassword(passwordEncoder.encode(userDeatils.getNewPassword()));
+            }
         }
         existingUser.setUserType(userDeatils.getUserType());
+        String newToken = jwtService.generateToken(existingUser);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("user edited: ", usersRepository.save(existingUser));
+        response.put("newToken", newToken);
+        return response;
+    }
+
+    @Transactional
+    public UsersModel updateAdmin(Long id, UsersDTO userDeatils) {
+        UsersModel existingUser = usersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
+        existingUser.setFullName(userDeatils.getFullName());
+        existingUser.setPhoneNumber(userDeatils.getPhoneNumber());
+        existingUser.setEmail(userDeatils.getEmail());
+        if (!userDeatils.getCurrentPassword().isEmpty() || userDeatils.getCurrentPassword() != null) {
+            if (!passwordEncoder.matches(userDeatils.getCurrentPassword(), existingUser.getPassword())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password incorrect");
+            }
+            if (userDeatils.getNewPassword().equals(userDeatils.getRepeatNewPassword())) {
+                existingUser.setPassword(passwordEncoder.encode(userDeatils.getNewPassword()));
+            }
+        }
+        existingUser.setUserType(userDeatils.getUserType());
+        System.out.println(existingUser);
         return usersRepository.save(existingUser);
     }
 
