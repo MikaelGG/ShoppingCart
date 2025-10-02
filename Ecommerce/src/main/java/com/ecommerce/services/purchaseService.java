@@ -40,12 +40,17 @@ public class purchaseService {
 
     @Transactional(readOnly = true)
     public List<purchaseModel> getAllPurchase() {
-        return purchaseRepository.findAll();
+        return purchaseRepository.findAllByOrderByCreatedAtDesc();
     }
 
     @Transactional(readOnly = true)
     public List<purchaseModel> getUserPurchases(String email) {
         return purchaseRepository.findByBuyerEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public List<purchaseModel> getPurchasesByUserId(Long userId) {
+        return purchaseRepository.findByUserId(userId);
     }
 
     @Transactional(readOnly = true)

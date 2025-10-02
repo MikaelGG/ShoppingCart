@@ -2,8 +2,10 @@ package com.ecommerce.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +24,7 @@ public class mpWebhooks {
     @Column(name = "mp_id")
     private String mpId;
 
+    private Long userId;
     private String status;
     private String paymentType;
     private String paymentMethod;
@@ -31,6 +34,7 @@ public class mpWebhooks {
     @Column(columnDefinition = "json")
     private String rawData;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private Timestamp createdAt;
 }

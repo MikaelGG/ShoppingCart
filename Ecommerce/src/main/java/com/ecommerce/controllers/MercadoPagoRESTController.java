@@ -21,9 +21,9 @@ public class MercadoPagoRESTController {
     MercadoPagoService mercadoPagoService;
 
     @PostMapping("/create-preference")
-    public ResponseEntity<Map<String, String>> createPreference(@RequestBody List<PreferenceDTO> items) {
+    public ResponseEntity<Map<String, String>> createPreference(@RequestBody List<PreferenceDTO> items, @RequestParam Long userId) {
         try {
-            Preference preference = mercadoPagoService.createPreference(items);
+            Preference preference = mercadoPagoService.createPreference(items, userId);
 
             Map<String, String> response = new HashMap<>();
             response.put("preferenceId", preference.getId());

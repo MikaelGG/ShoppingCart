@@ -12,4 +12,8 @@ public interface purchaseRepository extends JpaRepository<purchaseModel, Long> {
 
     List<purchaseModel> findByBuyerEmail(String email);
 
+    List<purchaseModel> findAllByOrderByCreatedAtDesc();
+
+    List<purchaseModel> findByUserId(Long id);
+
 }

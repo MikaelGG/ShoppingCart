@@ -30,6 +30,11 @@ public class purchaseRESTController {
         return ResponseEntity.status(HttpStatus.OK).body(purchaseService.getUserPurchases(email));
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<purchaseModel>> getPurchasesByUserId(@PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(purchaseService.getPurchasesByUserId(userId));
+    }
+
     @GetMapping("/{mpPaymentId}/items")
     public ResponseEntity<List<Map<String, Object>>> getPurchaseItems(@PathVariable String mpPaymentId) {
         return ResponseEntity.status(HttpStatus.OK).body(purchaseService.getPurchaseItems(mpPaymentId));

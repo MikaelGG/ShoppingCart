@@ -9,10 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.merchantorder.MerchantOrderClient;
 import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
-import com.mercadopago.client.preference.PreferenceClient;
-import com.mercadopago.client.preference.PreferenceItemRequest;
-import com.mercadopago.client.preference.PreferenceRequest;
+import com.mercadopago.client.preference.*;
 import com.mercadopago.resources.merchantorder.MerchantOrder;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
@@ -25,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -53,7 +49,7 @@ public class MercadoPagoService {
     }
 
     @Transactional
-    public Preference createPreference(List<PreferenceDTO> itemsData) throws Exception {
+    public Preference createPreference(List<PreferenceDTO> itemsData, Long userId) throws Exception {
         List<PreferenceItemRequest> items = new ArrayList<>();
 
         for (PreferenceDTO item : itemsData) {
@@ -69,15 +65,20 @@ public class MercadoPagoService {
         }
 
         PreferenceBackUrlsRequest backUrlsRequest = PreferenceBackUrlsRequest.builder()
-                .success("https://region-reduction-stations-glory.trycloudflare.com/purchase-records")
-                .failure("https://region-reduction-stations-glory.trycloudflare.com/purchase-records")
-                .pending("https://region-reduction-stations-glory.trycloudflare.com/purchase-records")
+                .success("https://wheat-workstation-decisions-que.trycloudflare.com/purchase-records")
+                .failure("https://wheat-workstation-decisions-que.trycloudflare.com/purchase-records")
+                .pending("https://wheat-workstation-decisions-que.trycloudflare.com/purchase-records")
                 .build();
+
+        PreferencePaymentMethodsRequest paymentMethods = PreferencePaymentMethodsRequest.builder().defaultInstallments(1).build();
+
 
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .items(items)
                 .backUrls(backUrlsRequest)
                 .notificationUrl("https://katharine-vomerine-sophia.ngrok-free.dev/mercadopago/webhooks")
+                .paymentMethods(paymentMethods)
+                .externalReference(userId.toString())
                 .build();
 
         PreferenceClient client = new PreferenceClient();
@@ -133,6 +134,7 @@ public class MercadoPagoService {
 
             mpWebhooks entity = new mpWebhooks();
             entity.setTopic("payment");
+            entity.setUserId(Long.parseLong(payment.getExternalReference()));
             entity.setMpId(payment.getId().toString());
             entity.setStatus(Objects.toString(payment.getStatus(), "UNKNOWN"));
             entity.setPaymentType(Objects.toString(payment.getPaymentTypeId(), "UNKNOWN"));
@@ -141,7 +143,6 @@ public class MercadoPagoService {
             entity.setCurrency(Objects.toString(payment.getCurrencyId(), "UNKNOWN"));
             String json = objectMapper.writeValueAsString(payment);
             entity.setRawData(json);
-            entity.setCreatedAt(LocalDateTime.now());
 
             mpWebhooksRepository.save(entity);
 
@@ -150,6 +151,7 @@ public class MercadoPagoService {
             purchase.setAmount(payment.getTransactionAmount());
             purchase.setCurrency(payment.getCurrencyId());
             purchase.setStatus(payment.getStatus());
+            purchase.setUserId(Long.parseLong(payment.getExternalReference()));
 
             purchaseRepository.save(purchase);
 
@@ -167,13 +169,13 @@ public class MercadoPagoService {
 
             mpWebhooks entity = new mpWebhooks();
             entity.setTopic("merchant_order");
+            entity.setUserId(Long.parseLong(order.getExternalReference()));
             entity.setMpId(order.getId().toString());
             entity.setStatus(Objects.toString(order.getStatus(), "UNKNOWN"));
             entity.setAmount(order.getTotalAmount());
             entity.setCurrency("COP");
             String json = objectMapper.writeValueAsString(order);
             entity.setRawData(json);
-            entity.setCreatedAt(LocalDateTime.now());
 
             mpWebhooksRepository.save(entity);
 
@@ -181,55 +183,6 @@ public class MercadoPagoService {
             log.error("❌ Error consultando orden {}", orderId, e);
         }
     }
-
-    /*@Transactional
-    public mpWebhooks WebHook(Map<String, Object> body) {
-        try {
-            System.out.println("📩 WebHook recibido: " + body);
-
-            Map<String, Object> data = (Map<String, Object>) body.get("data");
-            String paymentId = data.get("id").toString();
-
-            String url = "https://api.mercadopago.com/v1/payments/" + paymentId;
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + accessToken);
-
-            HttpEntity<Void> entity = new HttpEntity<>(headers);
-            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
-
-            Map pago = response.getBody();
-            System.out.println("✅ Pago consultado: " + pago);
-
-            mpWebhooks webhook = new mpWebhooks();
-            webhook.setDataId(paymentId);
-            webhook.setAction((String) body.get("action"));
-            webhook.setType((String) body.get("type"));
-
-            if (pago != null) {
-                webhook.setStatus((String) pago.get("status"));
-                webhook.setCurrency((String) pago.get("currency_id"));
-
-                Object amount = pago.get("transaction_amount");
-                if (amount != null) {
-                    if (amount instanceof Number) {
-                        webhook.setAmount(BigDecimal.valueOf(((Number) amount).doubleValue()));
-                    } else {
-                        webhook.setAmount(new BigDecimal(amount.toString()));
-                    }
-                }
-
-                webhook.setPayload(pago.toString());
-            }
-
-            webhook.setProcessed(false);
-
-            return mpWebhooksRepository.save(webhook);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error procesando Webhook", e);
-        }
-    }*/
 
     @Transactional(readOnly = true)
     public List<mpWebhooks> getAllWebhooks() {

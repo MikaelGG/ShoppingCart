@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "purchases")
@@ -22,12 +24,14 @@ public class purchaseModel {
     private BigDecimal amount;
     private String currency;
     private String status; // PENDING, APPROVED, REJECTED
+    private Long userId;
 
     @Enumerated(EnumType.STRING)
     private ShippingStatus shippingStatus = ShippingStatus.EN_PROCESO;
 
-    @Column(name = "created_at", updatable = false, insertable = false)
-    private java.sql.Timestamp createdAt;
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private Timestamp createdAt;
 
     public enum ShippingStatus {
         EN_PROCESO,
