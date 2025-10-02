@@ -69,9 +69,9 @@ public class MercadoPagoService {
         }
 
         PreferenceBackUrlsRequest backUrlsRequest = PreferenceBackUrlsRequest.builder()
-                .success("https://managing-atm-peaceful-triangle.trycloudflare.com/purchase-records")
-                .failure("https://managing-atm-peaceful-triangle.trycloudflare.com/purchase-records")
-                .pending("https://managing-atm-peaceful-triangle.trycloudflare.com/purchase-records")
+                .success("https://region-reduction-stations-glory.trycloudflare.com/purchase-records")
+                .failure("https://region-reduction-stations-glory.trycloudflare.com/purchase-records")
+                .pending("https://region-reduction-stations-glory.trycloudflare.com/purchase-records")
                 .build();
 
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()

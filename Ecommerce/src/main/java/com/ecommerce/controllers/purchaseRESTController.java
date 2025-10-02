@@ -30,9 +30,14 @@ public class purchaseRESTController {
         return ResponseEntity.status(HttpStatus.OK).body(purchaseService.getUserPurchases(email));
     }
 
+    @GetMapping("/{mpPaymentId}/items")
+    public ResponseEntity<List<Map<String, Object>>> getPurchaseItems(@PathVariable String mpPaymentId) {
+        return ResponseEntity.status(HttpStatus.OK).body(purchaseService.getPurchaseItems(mpPaymentId));
+    }
+
     @PutMapping("/{id}/shipping")
-    public ResponseEntity<purchaseModel> updateShippingStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        return ResponseEntity.status(HttpStatus.OK).body(purchaseService.updateShippingStatus(id, body));
+    public ResponseEntity<purchaseModel> updateShippingStatus(@PathVariable Long id, @RequestBody purchaseModel.ShippingStatus status) {
+        return ResponseEntity.status(HttpStatus.OK).body(purchaseService.updateShippingStatus(id, status));
     }
 
 }
